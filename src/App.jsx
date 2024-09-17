@@ -5,11 +5,13 @@ import {
   Typography,
   Grid,
   Paper,
+  Button,
   useTheme,
   useMediaQuery,
 } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 function App() {
   useEffect(() => {
@@ -31,7 +33,7 @@ function App() {
 
   const [paletteItems, setPaletteItems] = useState(initialPaletteItems);
   const [currentEmotions, setCurrentEmotions] = useState([]); // Left field
-  const [desiredEmotions, setDesiredEmotions] = useState([]); // Renamed from rightItems
+  const [desiredEmotions, setDesiredEmotions] = useState([]); // Right field
 
   const handleDragStart = (e, item, from) => {
     e.dataTransfer.setData(
@@ -66,6 +68,17 @@ function App() {
     } else if (to === 'palette') {
       setPaletteItems((prev) => [...prev, item]);
     }
+  };
+
+  const handleGoClick = () => {
+    console.log(
+      'Emotions I Currently Feel:',
+      currentEmotions.map((item) => item.emoji)
+    );
+    console.log(
+      'Emotions I Want to Feel:',
+      desiredEmotions.map((item) => item.emoji)
+    );
   };
 
   const boxStyles = {
@@ -222,6 +235,25 @@ function App() {
           </Box>
         </Grid>
       </Grid>
+
+      {/* GO! Button */}
+      <Box
+        sx={{
+          mt: 4,
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          startIcon={<PlayArrowIcon />}
+          onClick={handleGoClick}
+        >
+          GO!
+        </Button>
+      </Box>
     </Box>
   );
 }
