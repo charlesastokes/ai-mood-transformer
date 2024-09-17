@@ -81,6 +81,14 @@ function App() {
     );
   };
 
+  // Thumb hole constants
+  const thumbHole = {
+    xPercent: 15,    // X position as a percentage
+    yPercent: 70,    // Y position as a percentage
+    radius: 25,      // Radius in pixels
+    borderWidth: 4,  // Border width in pixels
+  };
+
   const paletteStyles = {
     position: 'relative',
     width: '300px',
@@ -96,22 +104,34 @@ function App() {
       radial-gradient(circle at 50% 50%, #483D8B, #000000)
     `,
     borderRadius: '50% 50% 40% 60% / 60% 40% 60% 40%',
-    mb: 4,
-    mx: 'auto', // Center horizontally
+    border: `${thumbHole.borderWidth}px solid black`, // Use thumb hole border width
+    boxSizing: 'border-box',
+    mb: 2,
+    mx: 'auto', // Center the palette horizontally
     overflow: 'hidden',
     /* Create Transparent Thumb Hole */
     maskImage: `
       radial-gradient(
-        circle at 15% 70%,
+        circle at ${thumbHole.xPercent}% ${thumbHole.yPercent}%,
         transparent 0px,
-        transparent 25px,
-        black 26px,
+        transparent ${thumbHole.radius}px,
+        black ${thumbHole.radius + 1}px,
         black 100%
       )
     `,
     maskSize: '100% 100%',
     maskPosition: '0 0',
     maskRepeat: 'no-repeat',
+  };
+
+  const boxStyles = {
+    border: '4px dashed black', // Thicker and bolder dashed lines
+    borderRadius: '8px',
+    height: '300px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    p: 2,
   };
 
   const itemStyles = {
@@ -140,12 +160,13 @@ function App() {
         AI Mood Transformer
       </Typography>
 
-      {/* Palette Box */}
+      {/* Palette Box with Border */}
       <Box
         sx={paletteStyles}
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => handleDrop(e, 'palette')}
       >
+
         {/* Stars Overlay */}
         <Box
           sx={{
@@ -160,6 +181,21 @@ function App() {
               radial-gradient(1.5px 1.5px at 40% 80%, white, transparent)
             `,
             backgroundRepeat: 'no-repeat',
+          }}
+        />
+        {/* Thumb Hole Border */}
+        <Box
+          sx={{
+            position: 'absolute',
+            width: `${thumbHole.radius * 2}px`,
+            height: `${thumbHole.radius * 2}px`,
+            border: `${thumbHole.borderWidth}px solid black`,
+            borderRadius: '50%',
+            top: `${thumbHole.yPercent}%`,
+            left: `${thumbHole.xPercent}%`,
+            transform: 'translate(-50%, -50%)',
+            boxSizing: 'border-box',
+            pointerEvents: 'none',
           }}
         />
         {/* Emoji Items */}
@@ -180,20 +216,17 @@ function App() {
         ))}
       </Box>
 
+      {/* Emotion Palette Text */}
+      <Typography variant="subtitle1" align="center" gutterBottom>
+        Emotion Palette
+      </Typography>
+
       {/* Main Content */}
       <Grid container spacing={2} alignItems="center" justifyContent="center">
         {/* Emotions I Currently Feel (Left Field) */}
         <Grid item xs={12} sm={5} md={4}>
           <Box
-            sx={{
-              border: '2px dashed grey',
-              borderRadius: '8px',
-              height: '300px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              p: 2,
-            }}
+            sx={boxStyles}
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => handleDrop(e, 'currentEmotions')}
           >
@@ -244,15 +277,7 @@ function App() {
         {/* Emotions I Want to Feel (Right Field) */}
         <Grid item xs={12} sm={5} md={4}>
           <Box
-            sx={{
-              border: '2px dashed grey',
-              borderRadius: '8px',
-              height: '300px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              p: 2,
-            }}
+            sx={boxStyles}
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => handleDrop(e, 'desiredEmotions')}
           >
