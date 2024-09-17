@@ -1,12 +1,23 @@
 // src/App.jsx
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, Typography, Grid, Paper } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Grid,
+  Paper,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 function App() {
   useEffect(() => {
     document.title = 'AI Mood Transformer';
   }, []);
+
+  const theme = useTheme(); // Correctly use useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const itemIdCounter = useRef(0);
 
@@ -21,8 +32,11 @@ function App() {
   const [rightItems, setRightItems] = useState([]);
 
   const handleDragStart = (e, item, from) => {
-    e.dataTransfer.setData('application/json', JSON.stringify({ item, from }));
-    // Do not remove item from the source during drag start
+    e.dataTransfer.setData(
+      'application/json',
+      JSON.stringify({ item, from })
+    );
+    // Do not remove item from source during drag start
   };
 
   const handleDrop = (e, to) => {
@@ -159,7 +173,11 @@ function App() {
           alignItems="center"
           justifyContent="center"
         >
-          <ArrowForwardIcon style={{ fontSize: 50 }} />
+          {isSmallScreen ? (
+            <ArrowDownwardIcon style={{ fontSize: 50 }} />
+          ) : (
+            <ArrowForwardIcon style={{ fontSize: 50 }} />
+          )}
         </Grid>
 
         {/* Right Field */}
