@@ -85,10 +85,33 @@ function App() {
     position: 'relative',
     width: '300px',
     height: '200px',
-    backgroundColor: '#f5deb3', // Light wood color
+    background: `
+      /* Colorful Galaxies */
+      radial-gradient(circle at 20% 30%, rgba(255, 0, 255, 0.5), transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(0, 255, 255, 0.5), transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(255, 255, 0, 0.5), transparent 50%),
+      radial-gradient(circle at 60% 40%, rgba(255, 165, 0, 0.5), transparent 50%),
+      radial-gradient(circle at 30% 60%, rgba(0, 128, 0, 0.5), transparent 50%),
+      /* Deep Space Background */
+      radial-gradient(circle at 50% 50%, #483D8B, #000000)
+    `,
     borderRadius: '50% 50% 40% 60% / 60% 40% 60% 40%',
     mb: 4,
     mx: 'auto', // Center horizontally
+    overflow: 'hidden',
+    /* Create Transparent Thumb Hole */
+    maskImage: `
+      radial-gradient(
+        circle at 15% 70%,
+        transparent 0px,
+        transparent 25px,
+        black 26px,
+        black 100%
+      )
+    `,
+    maskSize: '100% 100%',
+    maskPosition: '0 0',
+    maskRepeat: 'no-repeat',
   };
 
   const itemStyles = {
@@ -123,17 +146,20 @@ function App() {
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => handleDrop(e, 'palette')}
       >
-        {/* Thumb Hole */}
+        {/* Stars Overlay */}
         <Box
           sx={{
             position: 'absolute',
-            width: '50px',
-            height: '50px',
-            backgroundColor: '#fff',
-            borderRadius: '50%',
-            top: '70%',
-            left: '10%',
-            transform: 'translate(-50%, -50%)',
+            width: '100%',
+            height: '100%',
+            background: `
+              radial-gradient(2px 2px at 20% 30%, white, transparent),
+              radial-gradient(1.5px 1.5px at 50% 60%, white, transparent),
+              radial-gradient(2px 2px at 70% 40%, white, transparent),
+              radial-gradient(1px 1px at 80% 80%, white, transparent),
+              radial-gradient(1.5px 1.5px at 40% 80%, white, transparent)
+            `,
+            backgroundRepeat: 'no-repeat',
           }}
         />
         {/* Emoji Items */}
