@@ -16,20 +16,22 @@ function App() {
     document.title = 'AI Mood Transformer';
   }, []);
 
-  const theme = useTheme(); // Correctly use useTheme()
+  const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const itemIdCounter = useRef(0);
 
-  // Initialize Pallet Items with Unique IDs
-  const initialPalletItems = ['😀', '😃', '😄', '😁', '😆', '😅'].map((emoji) => ({
-    id: itemIdCounter.current++,
-    emoji,
-  }));
+  // Initialize Palette Items with Unique IDs
+  const initialPaletteItems = ['😀', '😃', '😄', '😁', '😆', '😅'].map(
+    (emoji) => ({
+      id: itemIdCounter.current++,
+      emoji,
+    })
+  );
 
-  const [palletItems, setPalletItems] = useState(initialPalletItems);
-  const [leftItems, setLeftItems] = useState([]);
-  const [rightItems, setRightItems] = useState([]);
+  const [paletteItems, setPaletteItems] = useState(initialPaletteItems);
+  const [currentEmotions, setCurrentEmotions] = useState([]); // Left field
+  const [desiredEmotions, setDesiredEmotions] = useState([]); // Renamed from rightItems
 
   const handleDragStart = (e, item, from) => {
     e.dataTransfer.setData(
@@ -41,26 +43,28 @@ function App() {
 
   const handleDrop = (e, to) => {
     e.preventDefault();
-    const { item, from } = JSON.parse(e.dataTransfer.getData('application/json'));
+    const { item, from } = JSON.parse(
+      e.dataTransfer.getData('application/json')
+    );
 
     if (from === to) return;
 
     // Remove item from the source
-    if (from === 'left') {
-      setLeftItems((prev) => prev.filter((i) => i.id !== item.id));
-    } else if (from === 'right') {
-      setRightItems((prev) => prev.filter((i) => i.id !== item.id));
-    } else if (from === 'pallet') {
-      setPalletItems((prev) => prev.filter((i) => i.id !== item.id));
+    if (from === 'currentEmotions') {
+      setCurrentEmotions((prev) => prev.filter((i) => i.id !== item.id));
+    } else if (from === 'desiredEmotions') {
+      setDesiredEmotions((prev) => prev.filter((i) => i.id !== item.id));
+    } else if (from === 'palette') {
+      setPaletteItems((prev) => prev.filter((i) => i.id !== item.id));
     }
 
     // Add item to the destination
-    if (to === 'left') {
-      setLeftItems((prev) => [...prev, item]);
-    } else if (to === 'right') {
-      setRightItems((prev) => [...prev, item]);
-    } else if (to === 'pallet') {
-      setPalletItems((prev) => [...prev, item]);
+    if (to === 'currentEmotions') {
+      setCurrentEmotions((prev) => [...prev, item]);
+    } else if (to === 'desiredEmotions') {
+      setDesiredEmotions((prev) => [...prev, item]);
+    } else if (to === 'palette') {
+      setPaletteItems((prev) => [...prev, item]);
     }
   };
 
@@ -94,7 +98,7 @@ function App() {
         AI Mood Transformer
       </Typography>
 
-      {/* Pallet Box */}
+      {/* Palette Box */}
       <Box
         sx={{
           ...boxStyles,
@@ -102,9 +106,9 @@ function App() {
           mb: 4,
         }}
         onDragOver={(e) => e.preventDefault()}
-        onDrop={(e) => handleDrop(e, 'pallet')}
+        onDrop={(e) => handleDrop(e, 'palette')}
       >
-        <Typography variant="h6">Pallet</Typography>
+        <Typography variant="h6">Palette</Typography>
         <Box
           sx={{
             mt: 2,
@@ -113,12 +117,12 @@ function App() {
             justifyContent: 'center',
           }}
         >
-          {palletItems.map((item) => (
+          {paletteItems.map((item) => (
             <Paper
               key={item.id}
               sx={itemStyles}
               draggable
-              onDragStart={(e) => handleDragStart(e, item, 'pallet')}
+              onDragStart={(e) => handleDragStart(e, item, 'palette')}
             >
               {item.emoji}
             </Paper>
@@ -128,7 +132,7 @@ function App() {
 
       {/* Main Content */}
       <Grid container spacing={2} alignItems="center" justifyContent="center">
-        {/* Left Field */}
+        {/* Emotions I Currently Feel (Left Field) */}
         <Grid item xs={12} sm={5} md={4}>
           <Box
             sx={{
@@ -136,9 +140,9 @@ function App() {
               height: '300px',
             }}
             onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => handleDrop(e, 'left')}
+            onDrop={(e) => handleDrop(e, 'currentEmotions')}
           >
-            <Typography variant="h6">Left Field</Typography>
+            <Typography variant="h6">Emotions I Currently Feel</Typography>
             <Box
               sx={{
                 mt: 2,
@@ -148,12 +152,14 @@ function App() {
                 justifyContent: 'center',
               }}
             >
-              {leftItems.map((item) => (
+              {currentEmotions.map((item) => (
                 <Paper
                   key={item.id}
                   sx={itemStyles}
                   draggable
-                  onDragStart={(e) => handleDragStart(e, item, 'left')}
+                  onDragStart={(e) =>
+                    handleDragStart(e, item, 'currentEmotions')
+                  }
                 >
                   {item.emoji}
                 </Paper>
@@ -180,7 +186,7 @@ function App() {
           )}
         </Grid>
 
-        {/* Right Field */}
+        {/* Emotions I Want to Feel (Right Field) */}
         <Grid item xs={12} sm={5} md={4}>
           <Box
             sx={{
@@ -188,9 +194,9 @@ function App() {
               height: '300px',
             }}
             onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => handleDrop(e, 'right')}
+            onDrop={(e) => handleDrop(e, 'desiredEmotions')}
           >
-            <Typography variant="h6">Right Field</Typography>
+            <Typography variant="h6">Emotions I Want to Feel</Typography>
             <Box
               sx={{
                 mt: 2,
@@ -200,12 +206,14 @@ function App() {
                 justifyContent: 'center',
               }}
             >
-              {rightItems.map((item) => (
+              {desiredEmotions.map((item) => (
                 <Paper
                   key={item.id}
                   sx={itemStyles}
                   draggable
-                  onDragStart={(e) => handleDragStart(e, item, 'right')}
+                  onDragStart={(e) =>
+                    handleDragStart(e, item, 'desiredEmotions')
+                  }
                 >
                   {item.emoji}
                 </Paper>
