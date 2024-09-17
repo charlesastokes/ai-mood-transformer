@@ -81,28 +81,34 @@ function App() {
     );
   };
 
-  const boxStyles = {
-    border: '2px dashed grey',
-    borderRadius: '8px',
-    minHeight: '200px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    p: 2,
+  const paletteStyles = {
+    position: 'relative',
+    width: '300px',
+    height: '200px',
+    backgroundColor: '#f5deb3', // Light wood color
+    borderRadius: '50% 50% 40% 60% / 60% 40% 60% 40%',
+    mb: 4,
+    mx: 'auto', // Center horizontally
   };
 
   const itemStyles = {
-    width: '50px',
-    height: '50px',
-    p: 1,
-    mb: 1,
-    mr: 1,
+    width: '40px',
+    height: '40px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: '2rem',
+    fontSize: '1.5rem',
     cursor: 'grab',
   };
+
+  const positions = [
+    { top: '30%', left: '30%' },
+    { top: '20%', left: '60%' },
+    { top: '50%', left: '70%' },
+    { top: '70%', left: '50%' },
+    { top: '60%', left: '20%' },
+    { top: '40%', left: '45%' },
+  ];
 
   return (
     <Box sx={{ p: 4 }}>
@@ -113,34 +119,39 @@ function App() {
 
       {/* Palette Box */}
       <Box
-        sx={{
-          ...boxStyles,
-          width: '100%',
-          mb: 4,
-        }}
+        sx={paletteStyles}
         onDragOver={(e) => e.preventDefault()}
         onDrop={(e) => handleDrop(e, 'palette')}
       >
-        <Typography variant="h6">Palette</Typography>
+        {/* Thumb Hole */}
         <Box
           sx={{
-            mt: 2,
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
+            position: 'absolute',
+            width: '50px',
+            height: '50px',
+            backgroundColor: '#fff',
+            borderRadius: '50%',
+            top: '70%',
+            left: '10%',
+            transform: 'translate(-50%, -50%)',
           }}
-        >
-          {paletteItems.map((item) => (
-            <Paper
-              key={item.id}
-              sx={itemStyles}
-              draggable
-              onDragStart={(e) => handleDragStart(e, item, 'palette')}
-            >
-              {item.emoji}
-            </Paper>
-          ))}
-        </Box>
+        />
+        {/* Emoji Items */}
+        {paletteItems.map((item, index) => (
+          <Paper
+            key={item.id}
+            sx={{
+              ...itemStyles,
+              position: 'absolute',
+              top: positions[index].top,
+              left: positions[index].left,
+            }}
+            draggable
+            onDragStart={(e) => handleDragStart(e, item, 'palette')}
+          >
+            {item.emoji}
+          </Paper>
+        ))}
       </Box>
 
       {/* Main Content */}
@@ -149,8 +160,13 @@ function App() {
         <Grid item xs={12} sm={5} md={4}>
           <Box
             sx={{
-              ...boxStyles,
+              border: '2px dashed grey',
+              borderRadius: '8px',
               height: '300px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              p: 2,
             }}
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => handleDrop(e, 'currentEmotions')}
@@ -203,8 +219,13 @@ function App() {
         <Grid item xs={12} sm={5} md={4}>
           <Box
             sx={{
-              ...boxStyles,
+              border: '2px dashed grey',
+              borderRadius: '8px',
               height: '300px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              p: 2,
             }}
             onDragOver={(e) => e.preventDefault()}
             onDrop={(e) => handleDrop(e, 'desiredEmotions')}
