@@ -17,6 +17,15 @@ import ImageLightbox from './ImageLightbox';
 
 import GalaxyButton from './GalaxyButton';
 
+import OpenAI from "openai";
+
+const openAIClient = new OpenAI({
+  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+  // TODO - This is only running local and I know what I'm doing, 
+  //        this will be fronted by a proper server when I have time with proper auth
+  dangerouslyAllowBrowser: true 
+});
+
 function App() {
   useEffect(() => {
     document.title = 'AI Mood Transformer';
@@ -26,6 +35,27 @@ function App() {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const itemIdCounter = useRef(0);
+
+  const [lightboxOpen, setLightboxOpen] = React.useState(false);
+  const [lightboxImageSource, setLightboxImageSource] = React.useState('');
+
+  // Function to open the lightbox
+  const handleOpenLightbox = async (prompt) => {
+    alert(prompt)
+    const image = await openAIClient.images.generate({ model: "dall-e-3", prompt: prompt });
+
+    console.log(image.data[0].url);
+    await setLightboxImageSource(image.data[0].url);
+    setLightboxOpen(true);
+
+  };
+
+  // Function to close the lightbox
+  const handleCloseLightbox = () => {
+    setLightboxOpen(false);
+  };
+
+
 
   // Initialize Palette Items with Unique IDs
   const initialPaletteItems = ['😀', '😱', '😡', '😁', '😆', '😅', '😴', '😍'].map(
@@ -75,14 +105,11 @@ function App() {
   };
 
   const handleGoClick = () => {
-    console.log(
-      'Emotions I Currently Feel:',
-      currentEmotions.map((item) => item.emoji)
-    );
-    console.log(
-      'Emotions I Want to Feel:',
-      desiredEmotions.map((item) => item.emoji)
-    );
+    let prompt = "You are a psychologist with brilliant and clever understanding of young people and the challenges they face. You are also an artist of incredible ability, crafting digital and realistic images together to create mesmerizing scenes. A patient describes their current mood in emojis, and says they want to change their emotion to a different set of emojis. Given the current emojis and desired emojis, you will generate a mesmerizing scene blending realistic images and digital art as needed to transform their current mood to the desired mood. Your response is the image. In your image do not show a transformation with a split left and right. Only show a final desired image which helps facilitate moving their mood to the destination mood. Generate the scene with understanding of their current emotion, but do not represent it in the scene. DO NOT SHOW EMOJIS IN THE RESPONSE. \n\n"
+    prompt += "Emotions I Currently Feel: " + currentEmotions.map((item) => item.emoji).join(' ') + "\n";
+    prompt += "Emotions I Want to Feel: " + desiredEmotions.map((item) => item.emoji).join(' ') + "\n";
+
+    handleOpenLightbox(prompt)
   };
 
   // Thumb hole constants
@@ -159,24 +186,14 @@ function App() {
     { top: '5%', left: '38%' },
   ];
 
-  const [lightboxOpen, setLightboxOpen] = React.useState(false);
 
-    // Function to open the lightbox
-    const handleOpenLightbox = () => {
-      setLightboxOpen(true);
-    };
-  
-    // Function to close the lightbox
-    const handleCloseLightbox = () => {
-      setLightboxOpen(false);
-    };
 
   return (
     <Box sx={{ p: 4 }}>
       <ImageLightbox
         open={lightboxOpen}
         onClose={handleCloseLightbox}
-        imageSrc="https://via.placeholder.com/800x600.png?text=Sample+Image"
+        imageSrc={lightboxImageSource}
         altText="Sample Image"
       />
       {/* Page Title */}
@@ -345,7 +362,7 @@ function App() {
           color="primary"
           size="large"
           startIcon={<PlayArrowIcon />}
-          onClick={handleOpenLightbox}
+          onClick={handleGoClick}
         >
           GO!
         </GalaxyButton >

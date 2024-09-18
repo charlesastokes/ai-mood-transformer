@@ -93,7 +93,6 @@ const ImageLightbox = ({ open, onClose, imageSrc, altText = 'Image' }) => {
 ImageLightbox.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  imageSrc: PropTypes.string.isRequired,
   altText: PropTypes.string,
 };
 
