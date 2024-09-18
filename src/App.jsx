@@ -26,7 +26,7 @@ function App() {
   const itemIdCounter = useRef(0);
 
   // Initialize Palette Items with Unique IDs
-  const initialPaletteItems = ['😀', '😃', '😄', '😁', '😆', '😅'].map(
+  const initialPaletteItems = ['😀', '😱', '😡', '😁', '😆', '😅', '😴', '😍'].map(
     (emoji) => ({
       id: itemIdCounter.current++,
       emoji,
@@ -151,8 +151,10 @@ function App() {
     { top: '20%', left: '60%' },
     { top: '50%', left: '70%' },
     { top: '70%', left: '50%' },
-    { top: '60%', left: '20%' },
+    { top: '60%', left: '25%' },
     { top: '40%', left: '45%' },
+    { top: '35%', left: '85%' },
+    { top: '5%', left: '38%' },
   ];
 
   return (
