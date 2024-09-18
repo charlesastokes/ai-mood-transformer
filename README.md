@@ -1,8 +1,16 @@
-# React + Vite
+# AI Mood Transformer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Just a fun app to experiment with powerful AI Images that evoke an emotional response. This app lets users drag and drop emojis. Users describe their current emotion and their desired emotion via emojis. An AI Generated Image is created to help transform the user's emotions to desired state.
 
-Currently, two official plugins are available:
+## Tech Stack
+Vite, React, MaterialUI, OpenAI NodeJS Library, DAL-E 3 API
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Screenshots
+
+![alt text](docs/images/screenshot-2A.PNG)
+
+![alt text](docs/images/screenshot-2.PNG)
+
+![alt text](docs/images/screenshot-1.PNG)
+
+![alt text](docs/images/screenshot-1A.PNG)
