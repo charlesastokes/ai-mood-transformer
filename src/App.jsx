@@ -13,6 +13,8 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
+import ImageLightbox from './ImageLightbox'; 
+
 import GalaxyButton from './GalaxyButton';
 
 function App() {
@@ -157,8 +159,26 @@ function App() {
     { top: '5%', left: '38%' },
   ];
 
+  const [lightboxOpen, setLightboxOpen] = React.useState(false);
+
+    // Function to open the lightbox
+    const handleOpenLightbox = () => {
+      setLightboxOpen(true);
+    };
+  
+    // Function to close the lightbox
+    const handleCloseLightbox = () => {
+      setLightboxOpen(false);
+    };
+
   return (
     <Box sx={{ p: 4 }}>
+      <ImageLightbox
+        open={lightboxOpen}
+        onClose={handleCloseLightbox}
+        imageSrc="https://via.placeholder.com/800x600.png?text=Sample+Image"
+        altText="Sample Image"
+      />
       {/* Page Title */}
       <Typography variant="h3" align="center" gutterBottom>
         AI Mood Transformer
@@ -325,7 +345,7 @@ function App() {
           color="primary"
           size="large"
           startIcon={<PlayArrowIcon />}
-          onClick={handleGoClick}
+          onClick={handleOpenLightbox}
         >
           GO!
         </GalaxyButton >
