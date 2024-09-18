@@ -13,6 +13,8 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
+import GalaxyButton from './GalaxyButton';
+
 function App() {
   useEffect(() => {
     document.title = 'AI Mood Transformer';
@@ -316,7 +318,7 @@ function App() {
           justifyContent: 'center',
         }}
       >
-        <Button
+        <GalaxyButton 
           variant="contained"
           color="primary"
           size="large"
@@ -324,7 +326,7 @@ function App() {
           onClick={handleGoClick}
         >
           GO!
-        </Button>
+        </GalaxyButton >
       </Box>
     </Box>
   );
